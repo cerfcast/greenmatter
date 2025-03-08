@@ -1,6 +1,8 @@
 #ifndef _CURRENT_H
 #define _CURRENT_H
 
-int currentCurrent();
+#include <lib/core/NodeId.h>
+#include <lib/core/DataModelTypes.h>
 
+int currentCurrent(chip::NodeId destinationId, chip::EndpointId endpointId);
 #endif

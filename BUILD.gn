@@ -14,13 +14,28 @@
 
 import("//build_overrides/build.gni")
 import("//build_overrides/chip.gni")
+import("//build_overrides/green.gni")
 
 import("${build_root}/config/compiler/compiler.gni")
 import("${chip_root}/build/chip/tests.gni")
 import("${chip_root}/src/platform/device.gni")
 
+config("green-config") {
+  include_dirs = [
+    "${green_root}/include",
+  ]
+}
+
+static_library("green") {
+  sources = [ "green.cpp" ]
+  public_configs = [":green-config"]
+  output_dir = root_out_dir
+}
+
 executable("greenmatter") {
   sources = [ "greenmatterc.cpp", "current.cpp" ]
+
+  include_dirs = [ "//bpf/" ]
 
   config_use_separate_eventloop = true
   config_use_interactive_mode = true
@@ -32,7 +47,11 @@ executable("greenmatter") {
 
   defines += [ "CONFIG_USE_LOCAL_STORAGE" ]
 
+  libs = [ "sockfilter", "bpf" ]
+  lib_dirs = [ "//bpf/build" ]
+
   deps = [
+    ":green",
     "${chip_root}/examples/chip-tool:chip-tool-utils",
     "${chip_root}/src/platform/logging:stdio",
   ]
