@@ -15,6 +15,7 @@
 import("//build_overrides/build.gni")
 import("//build_overrides/chip.gni")
 import("//build_overrides/green.gni")
+import("//build_overrides/support.gni")
 
 import("${build_root}/config/compiler/compiler.gni")
 import("${chip_root}/build/chip/tests.gni")
@@ -55,6 +56,27 @@ executable("greenmatter") {
     "${chip_root}/examples/chip-tool:chip-tool-utils",
     "${chip_root}/src/platform/logging:stdio",
   ]
+
+  output_dir = root_out_dir
+}
+
+
+config("support-config") {
+  include_dirs = [
+    "${support_root}/include",
+  ]
+}
+
+static_library("support") {
+  sources = [ "timecache.cpp" ]
+  public_configs = [":support-config"]
+  output_dir = root_out_dir
+}
+
+executable("support-test") {
+  sources = [ "test/timecache.cpp" ]
+
+  configs += [":support-config"]
 
   output_dir = root_out_dir
 }

@@ -1,0 +1,4 @@
+declare_args() {
+  # Root directory for the support library.
+  support_root = "//"
+}
